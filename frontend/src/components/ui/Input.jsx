@@ -5,6 +5,8 @@ export const Input = ({
   value,
   name,
   placeholder,
+  handleOnchange,
+
 }) => {
   return (
     <div>
@@ -21,6 +23,8 @@ export const Input = ({
         id={id}
         value={value}
         placeholder={placeholder}
+        onChange={(event) => handleOnchange(event)}
+        
       />
       {type === "password" && (
         <span className="mt-2 ml-1 text-xs font-medium">
