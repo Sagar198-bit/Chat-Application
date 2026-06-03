@@ -5,7 +5,7 @@ import { getme } from "../../src/api/authApi";
 export const isAuthenticated = createAsyncThunk("Authenticated", async () => {
   const response = await getme();
   console.log(response)
-  return response;
+  return response.data;
 });
 
 const initialState = {

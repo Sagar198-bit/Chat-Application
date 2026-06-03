@@ -1,5 +1,6 @@
 import { createUser, loginUser } from "../services/authServices.js";
-export const signup= async (req, res) => {
+import { userModel } from "../model/AuthModel.js";
+export const signup = async (req, res) => {
   try {
     await createUser(req.body);
     return res.status(201).json({
@@ -51,11 +52,26 @@ export const login = async (req, res) => {
   }
 };
 
+export const getme = async (req, res) => {
+  const { userId } = req.user;
+  try {
+    const user = await userModel.findById(userId).select("-password -_id -__v");
 
-export const getme = (req , res) => {
-  try{
-    console.log("Cookies: " , req.cookies)
-  }catch(err){
-    console.log(err)
+    if (!user) {
+      return res.status(404).json({
+        status: false,
+        message: "User Not Found",
+      });
+    }
+
+    return res.status(200).json({
+      status: true,
+      data: user,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      status: false,
+      message: err.message,
+    });
   }
-}
+};
