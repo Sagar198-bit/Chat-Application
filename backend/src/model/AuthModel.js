@@ -17,6 +17,18 @@ const userSchema = new Schema({
     unique: true,
     required: true,
   },
+  socket_id: {
+    type: String,
+    default: null,
+  },
+  online_status: {
+    type: Boolean,
+    default: false,
+  },
+  last_seen: {
+    type: Date,
+    default: null,
+  },
 });
 
 export const userModel = mongoose.model("users", userSchema);
