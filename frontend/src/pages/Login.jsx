@@ -4,7 +4,9 @@ import { NavLink } from "react-router-dom";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useGetLogin } from "../hooks/useAuth";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 export const Login = () => {
+   const navigate = useNavigate();
   const [loginDetails, setLoginDetails] = useState({
     email: "",
     password: "",
@@ -23,6 +25,7 @@ export const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+   
     const { email, password } = loginDetails;
 
     if (!email.trim() || !password.trim()) {
@@ -35,8 +38,9 @@ export const Login = () => {
         email: loginDetails.email,
         password: loginDetails.password,
       });
-      console.log(result);
+
       setLoginDetails({ email: "", password: "" });
+      navigate("/chats");
     } catch (error) {
       console.log(error);
     }

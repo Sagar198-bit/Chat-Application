@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { Login, Signup, DashBoard } from "./pages/index.js";
 import "./index.css";
+import { ProtectedRoutes } from "./components/ProtectedRoutes/ProtectRoute.jsx";
 // import { getme } from "./api/authApi.js";
 
 import { useEffect } from "react";
@@ -22,21 +23,23 @@ export const App = () => {
   //   fetchData();
   // }, []);
 
-
-  const dispatch = useDispatch()
-  const {data , status} = useSelector(state => state.Auth)
+  const dispatch = useDispatch();
+  const { data, status } = useSelector((state) => state.Auth);
   useEffect(() => {
-    if(status === 'idle'){
-      dispatch(isAuthenticated())
+    if (status === "idle") {
+      dispatch(isAuthenticated());
     }
-  })
+  }, []);
 
   // console.log(data)
   return (
     <Routes>
       <Route path="/" element={<Signup />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/chats" element={<DashBoard />} />
+
+      <Route element={<ProtectedRoutes/>}>
+        <Route path="/chats" element={<DashBoard />} />
+      </Route>
     </Routes>
   );
 };
