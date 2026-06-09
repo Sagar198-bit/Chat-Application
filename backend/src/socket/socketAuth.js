@@ -1,9 +1,12 @@
 import jwt from 'jsonwebtoken'
 import dotenv from "dotenv";
+import cookie from 'cookie'
 dotenv.config();
 const SocketAuth = (socket , next) => {
     try{
-        const token = socket.handshake.auth.token
+        const cookies = cookie.parse(socket.handshake.auth.token || "")
+        const token = cookies.token
+
         if(!token){
             return next(new Error('Authentication Required'))
         }

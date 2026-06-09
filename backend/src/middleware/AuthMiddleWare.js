@@ -3,8 +3,6 @@ import dotenv from "dotenv";
 
 dotenv.config();
 export const AuthMiddleWare = (req, res, next) => {
-
-  
   try {
     const { token } = req.cookies;
 
@@ -15,12 +13,10 @@ export const AuthMiddleWare = (req, res, next) => {
       });
     }
 
-    const isTokenVerifed = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    req.user = isTokenVerifed;
-    if (isTokenVerifed) {
-      next();
-    }
+    req.user = decoded;
+    next();
   } catch (error) {
     return res.status(401).json({
       status: false,
