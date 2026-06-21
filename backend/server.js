@@ -31,17 +31,17 @@ const io = new Server(server, {
   },
 });
 
-io.use(SocketAuth);
+// io.use(SocketAuth);
 
 // //env confiuration
 
 io.on("connection", (socket) => {
    console.log("User Connected", socket.id);
-  ConnectSocketHandler(socket);
+  // ConnectSocketHandler(socket);
  
 
   socket.on("disconnect", () => {
-    disconnectSocketHandler(socket);
+    console.log("User Disconnected !!")
   });
 });
 

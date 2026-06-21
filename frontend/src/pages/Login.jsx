@@ -1,10 +1,11 @@
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
 import { NavLink } from "react-router-dom";
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState,  useCallback, useMemo } from "react";
 import { useGetLogin } from "../hooks/useAuth";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import {Socket} from "../socket/socket.js";
 export const Login = () => {
    const navigate = useNavigate();
   const [loginDetails, setLoginDetails] = useState({
@@ -38,6 +39,9 @@ export const Login = () => {
         email: loginDetails.email,
         password: loginDetails.password,
       });
+
+      //create the connection of socket
+     Socket()
 
       setLoginDetails({ email: "", password: "" });
       navigate("/chats");
