@@ -3,7 +3,7 @@ import { Login, Signup, DashBoard } from "./pages/index.js";
 import "./index.css";
 import { ProtectedRoutes } from "./components/ProtectedRoutes/ProtectRoute.jsx";
 // import { getme } from "./api/authApi.js";
-
+import {useNavigate} from "react-router-dom";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { isAuthenticated } from "../store/AuthSlices/AuthSlices.js";
@@ -23,13 +23,21 @@ export const App = () => {
   //   fetchData();
   // }, []);
 
+    // const navigate = useNavigate();
   const dispatch = useDispatch();
   const { data, status } = useSelector((state) => state.Auth);
   useEffect(() => {
     if (status === "idle") {
       dispatch(isAuthenticated());
     }
+
   }, []);
+
+
+
+  // if(status === "succeeded"){
+  //     navigate("/chats")
+  // }
 
   // console.log(data)
   return (

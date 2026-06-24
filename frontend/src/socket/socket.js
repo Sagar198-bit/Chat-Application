@@ -2,7 +2,8 @@ import io from "socket.io-client";
 
 let socketInstances = null;
 
-function Socket()
+function Socket(){
+
 
 if (socketInstances) {
     return socketInstances

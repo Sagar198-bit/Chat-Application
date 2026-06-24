@@ -11,7 +11,9 @@ export const isAuthenticated = createAsyncThunk("Authenticated", async () => {
             if (response.status === 200) {
                 Socket()
             }
+
             return response.data;
+
         },
         {
             condition: (_, {getState}) => {
