@@ -1,5 +1,6 @@
-export const Card = ({username, profile, status, message}) => {
-    return (<div className="flex items-center gap-3 p-3 rounded-2xl hover:bg-slate-100 cursor-pointer transition-all duration-200">
+export const Card = ({id , username, profile, status, message , handleUser}) => {
+    return (
+        <div onClick={() => handleUser({id, username})} className="flex  items-center gap-3 p-3 rounded-2xl hover:bg-slate-100 cursor-pointer transition-all duration-200">
         <img
             src={profile}
             alt="profile"

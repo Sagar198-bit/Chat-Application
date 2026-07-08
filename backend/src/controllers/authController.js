@@ -45,17 +45,14 @@ export const login = async (req, res) => {
         status: false,
       });
     }
-    res.status(500).json({
-      message: "Server Internal Problem",
-      status: false,
-    });
+
   }
 };
 
 export const getme = async (req, res) => {
   const { userId } = req.user;
   try {
-    const user = await userModel.findById(userId).select("-password -_id -__v");
+    const user = await userModel.findById(userId).select("-password");
 
     if (!user) {
       return res.status(404).json({

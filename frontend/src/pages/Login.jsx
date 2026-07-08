@@ -40,8 +40,9 @@ export const Login = () => {
         password: loginDetails.password,
       });
 
+      const{id , name} = result?.user ?? {}
       //create the connection of socket
-     Socket()
+     Socket(id , name)
 
       setLoginDetails({ email: "", password: "" });
       navigate("/chats");

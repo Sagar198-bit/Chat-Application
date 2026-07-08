@@ -1,15 +1,14 @@
 import dotenv from "dotenv";
 dotenv.config();
 import express, { urlencoded } from "express";
-import AuthRoutes from "./src/routes/AuthRoutes.js";
+import AuthRoutes from "./src/routes/auth.routes.js";
 import http from "http";
 import cookieParser from "cookie-parser";
 import { DbConnect } from "./src/connection/dbconnect.js";
-import SocketAuth from "./src/socket/socketAuth.js";
+import {onlineUsers} from "./src/socket/onlineUsers.js";
 import { Server } from "socket.io";
 import cors from "cors";
-import { ConnectSocketHandler } from "./src/socket/connectHandler.js";
-import { disconnectSocketHandler } from "./src/socket/disconnectHandler.js";
+import {userRoutes} from "./src/routes/auth.users.js";
 const app = express();
 
 app.use(
@@ -38,7 +37,42 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
    console.log("User Connected", socket.id);
   // ConnectSocketHandler(socket);
- 
+
+
+
+    socket.on("join", (data) => {
+        const { userId, username } = data;
+
+        onlineUsers.set(userId, {
+            socketId: socket.id,
+            username
+        });
+        socket.on("sendMessage", async (message) => {
+            const {senderId, receiverId, text} = message
+
+
+            console.log('messages: ' , message)
+            // Save to DB (uncomment once you have a Message model)
+            // const savedMessage = await Message.create({ senderId, receiverId, text })
+
+            const receiver = onlineUsers.get(receiverId)
+
+            if (receiver) {
+                io.to(receiver.socketId).emit("receiveMessage", message)
+            }
+        })
+
+        // socket.on("disconnect", () => {
+        //     for (const [userId, value] of onlineUsers.entries()) {
+        //         if (value.socketId === socket.id) {
+        //             onlineUsers.delete(userId)
+        //             break
+        //         }
+        //     }
+        //     console.log("A user disconnected:", socket.id)
+        // })
+
+    });
 
   socket.on("disconnect", () => {
     console.log("User Disconnected !!")
@@ -56,6 +90,8 @@ DbConnect()
 
 //Authentications Routes
 app.use("/api/v1/auth", AuthRoutes);
+app.use("/api/v1", userRoutes);
+
 
 server.listen(process.env.PORT, () => {
   console.log(`Server is Runing...`);

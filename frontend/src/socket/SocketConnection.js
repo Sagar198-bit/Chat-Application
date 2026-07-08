@@ -3,6 +3,13 @@
 import {Socket} from "./socket.js"
 export const connectSocket = (status) => {
     if(status){
-        Socket()
+        const socket = Socket();
+
+        socket.on("connect", () => {
+            socket.emit("join", {
+                userId: data._id,
+                username: data.username,
+            });
+        });
     }
 }

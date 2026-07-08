@@ -1,30 +1,36 @@
 import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 
-import {getme} from "../../src/api/authApi";
+import {getme} from "../../src/api/auth.api.js";
 import {Socket} from "../../src/socket/socket.js";
 
-export const isAuthenticated = createAsyncThunk("Authenticated", async () => {
+export const isAuthenticated = createAsyncThunk(
     "Authenticated",
 
-        async () => {
-            const response = await getme();
-            if (response.status === 200) {
-                Socket()
-            }
+    async () => {
+        const response = await getme();
 
-            return response.data;
+        const{name , _id} = response?.data.data
 
-        },
-        {
-            condition: (_, {getState}) => {
-                const status = getState().auth.status;
-                if (status === "loading" || status === "succeeded") {
-                    return false; // ← Stops before even hitting backend
-                }
 
-            }
+        if (response.status === 200) {
+            Socket(name , _id);
         }
-});
+
+        return response.data;
+    },
+
+    {
+        condition: (_, { getState }) => {
+            const status = getState()?.auth?.status;
+
+            if (status === "loading" || status === "succeeded") {
+                return false;
+            }
+
+            return true;
+        }
+    }
+);
 
 const initialState = {
     data: [],
@@ -47,6 +53,7 @@ const AuthSlice = createSlice({
             .addCase(isAuthenticated.rejected, (state, action) => {
                 state.status = "error";
                 state.error = action.error.message;
+
             });
     },
 });

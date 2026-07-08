@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { Signup, Login } from "../api/authApi";
+import { Signup, Login } from "../api/auth.api.js";
 
 //user Signup
 export const useGetSignup = () => {
@@ -13,6 +13,8 @@ export const useGetSignup = () => {
 export const useGetLogin = () => {
   return useMutation({
     mutationFn: ({email, password}) => Login({email, password}),
-    onSuccess: (data) => console.log(data),
+    onSuccess: (data) => {
+      return data
+    }
   });
 };
