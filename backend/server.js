@@ -38,7 +38,20 @@ io.on("connection", (socket) => {
    console.log("User Connected", socket.id);
   // ConnectSocketHandler(socket);
 
+    socket.on("sendMessage",  (message) => {
+        const {senderId, receiverId, text} = message
 
+
+        console.log('messages: ' , message)
+        // Save to DB (uncomment once you have a Message model)
+        // const savedMessage = await Message.create({ senderId, receiverId, text })
+
+        const receiver = onlineUsers.get(receiverId)
+
+        if (receiver) {
+            io.to(receiver.socketId).emit("receiveMessage", message)
+        }
+    })
 
     socket.on("join", (data) => {
         const { userId, username } = data;
@@ -47,20 +60,7 @@ io.on("connection", (socket) => {
             socketId: socket.id,
             username
         });
-        socket.on("sendMessage", async (message) => {
-            const {senderId, receiverId, text} = message
 
-
-            console.log('messages: ' , message)
-            // Save to DB (uncomment once you have a Message model)
-            // const savedMessage = await Message.create({ senderId, receiverId, text })
-
-            const receiver = onlineUsers.get(receiverId)
-
-            if (receiver) {
-                io.to(receiver.socketId).emit("receiveMessage", message)
-            }
-        })
 
         // socket.on("disconnect", () => {
         //     for (const [userId, value] of onlineUsers.entries()) {

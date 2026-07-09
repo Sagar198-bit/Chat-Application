@@ -5,8 +5,8 @@ export const connectSocket = (status) => {
     if(status){
         const socket = Socket();
 
-        socket.on("connect", () => {
-            socket.emit("join", {
+        socket().on("connect", () => {
+            socket().emit("join", {
                 userId: data._id,
                 username: data.username,
             });

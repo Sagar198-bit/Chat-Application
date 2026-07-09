@@ -1,12 +1,13 @@
 import Avatar from "../../../public/avatar.webp";
 import {useSelector} from "react-redux";
-import {useState, useEffect} from "react";
+import {useState , useEffect} from "react";
 import {Socket} from "../../socket/socket.js" // adjust to your actual socket instance path
 
 export const ChatForm = ({user}) => {
     const {id: receiverId, username} = user
-    const {data} = useSelector((state) => state.Auth) // data = currently logged-in user
-    const currentUserId = data?._id
+    const {data} = useSelector((state) => state.Auth)
+    console.log('Senderid: ' , data)// data = currently logged-in user
+    const currentUserId = data?.data?._id
 
     const [textInput, setTextInput] = useState("")
     const [messages, setMessages] = useState([])
@@ -32,29 +33,30 @@ export const ChatForm = ({user}) => {
         // show it in my own chat immediately
         setMessages((prev) => [...prev, newMessage])
 
+
+        console.log(newMessage)
         // send it to the server to forward to the other user
-        Socket.emit("sendMessage", newMessage)
+        Socket().emit("sendMessage", newMessage)
 
         setTextInput("")
     }
+    useEffect(() => {
+        const handleIncoming = (message) => {
 
-    // listen for incoming messages from the currently open chat partner
-    // useEffect(() => {
-    //     const handleIncoming = (message) => {
-    //         if (message.senderId === receiverId) {
-    //             setMessages((prev) => [...prev, message])
-    //         }
-    //     }
-    //
-    //     Socket.on("receiveMessage", handleIncoming)
-    //
-    //     return () => {
-    //         Socket.off("receiveMessage", handleIncoming)
-    //     }
-    // }, [receiverId])
+            console.log("Received:", message);
 
-    return (
-        <div className="flex flex-col flex-1 bg-slate-50">
+            setMessages((prev) => [...prev, message]);
+        };
+
+        Socket().on("receiveMessage", handleIncoming);
+
+        return () => {
+            Socket().off("receiveMessage", handleIncoming);
+        };
+    }, []);
+
+
+    return (<div className="flex flex-col flex-1 bg-slate-50">
 
             {/* Header */}
             <div className="h-16 bg-white px-5 flex items-center justify-between shadow-sm">
@@ -81,19 +83,13 @@ export const ChatForm = ({user}) => {
             <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
                 {messages.map((message) => {
                     const isMine = message.senderId === currentUserId
-                    return (
-                        <div key={message.id} className={isMine ? "flex justify-end" : "flex justify-start"}>
+                    return (<div key={message.id} className={isMine ? "flex justify-end" : "flex justify-start"}>
                             <div
-                                className={
-                                    isMine
-                                        ? "bg-[#1372c1] text-white px-4 py-3 rounded-2xl rounded-br-md shadow-sm max-w-sm"
-                                        : "bg-white px-4 py-3 rounded-2xl rounded-bl-md shadow-sm max-w-sm"
-                                }
+                                className={isMine ? "bg-[#1372c1] text-white px-4 py-3 rounded-2xl rounded-br-md shadow-sm max-w-sm" : "bg-white px-4 py-3 rounded-2xl rounded-bl-md shadow-sm max-w-sm"}
                             >
                                 {message.text}
                             </div>
-                        </div>
-                    )
+                        </div>)
                 })}
             </div>
 
@@ -119,6 +115,5 @@ export const ChatForm = ({user}) => {
                 </div>
             </div>
 
-        </div>
-    )
+        </div>)
 }
