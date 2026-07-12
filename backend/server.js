@@ -61,6 +61,8 @@ io.on("connection", (socket) => {
             username
         });
 
+        io.emit('onlineUsers' , Array.from(onlineUsers.keys()))
+
 
         // socket.on("disconnect", () => {
         //     for (const [userId, value] of onlineUsers.entries()) {
@@ -76,6 +78,15 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("User Disconnected !!")
+
+      for(const [userId , value] of onlineUsers.entries()){
+          if(value.socketId === socket.id){
+              onlineUsers.delete(userId)
+              break
+          }
+      }
+
+      io.emit('onelineUsers' , Array.from(onlineUsers.keys()))
   });
 });
 

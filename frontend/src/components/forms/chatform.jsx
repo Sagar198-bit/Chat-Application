@@ -3,12 +3,12 @@ import {useSelector} from "react-redux";
 import {useState , useEffect} from "react";
 import {Socket} from "../../socket/socket.js" // adjust to your actual socket instance path
 
-export const ChatForm = ({user}) => {
+export const ChatForm = ({user , status}) => {
     const {id: receiverId, username} = user
     const {data} = useSelector((state) => state.Auth)
     console.log('Senderid: ' , data)// data = currently logged-in user
     const currentUserId = data?.data?._id
-
+    const isOnline = status.includes(receiverId)
     const [textInput, setTextInput] = useState("")
     const [messages, setMessages] = useState([])
 
@@ -56,7 +56,7 @@ export const ChatForm = ({user}) => {
     }, []);
 
 
-    return (<div className="flex flex-col flex-1 bg-slate-50">
+    return (<div className="flex flex-col flex-10 bg-slate-50">
 
             {/* Header */}
             <div className="h-16 bg-white px-5 flex items-center justify-between shadow-sm">
@@ -72,8 +72,9 @@ export const ChatForm = ({user}) => {
                             {username}
                         </h2>
 
-                        <p className="text-sm text-green-500">
-                            ● Online
+                        <p className={`text-sm flex items-center gap-1 ${isOnline ? "text-green-500" : "text-slate-400"}`}>
+                            <span className={`text-xs ${isOnline ? "text-green-500" : "text-slate-400"}`}>●</span>
+                            {isOnline ? "Online" : "Offline"}
                         </p>
                     </div>
                 </div>
