@@ -1,31 +1,30 @@
 import {Card} from "../components/ui/Card.jsx"
-import {v4 as uuidv4} from "uuid";
 import Avatar from "../../public/avatar.webp"
 import {useGetUsers} from "../hooks/useUsers.js";
 import {useEffect, useState} from "react";
 import {Socket} from "../socket/socket.js"
 import {useSelector} from "react-redux";
 import {ChatForm} from "../components/forms/chatform.jsx";
+
 export const DashBoard = () => {
 
     const {data} = useGetUsers()
     const [user, setUser] = useState(null)
-    const [onlineUsers , setOnlineUsers] = useState([])
+    const [onlineUsers, setOnlineUsers] = useState([])
+
 
     const {data: authData} = useSelector((state) => state.Auth)
     const socket = Socket(authData?.name, authData?._id)
 
     useEffect(() => {
         const handleUsers = (userIds) => {
-            console.log(userIds)
             setOnlineUsers(userIds)
         }
 
         socket.on('onlineUsers', handleUsers)
 
-
         return () => {
-            socket.off('onlineUsers' , handleUsers)
+            socket.off('onlineUsers', handleUsers)
         }
     }, []);
 
@@ -34,13 +33,8 @@ export const DashBoard = () => {
     }
 
 
-    if(onlineUsers){
-        console.log(onlineUsers)
-    }
 
-    if(data){
-        console.log(data)
-    }
+
     return (<section className="h-screen bg-slate-100 p-4">
         <div className="h-full flex overflow-hidden rounded-3xl bg-white shadow-2xl">
 
@@ -52,16 +46,15 @@ export const DashBoard = () => {
                     </h1>
                 </div>
 
-                <div className="p-3  flex-1 space-y-2 overflow-y-auto h-[calc(100%-64px)]">
+                <div className="p-3 flex-1 space-y-2 overflow-y-auto h-[calc(100%-64px)]">
                     {data?.map((eachCardDetails) => (
                         <Card
                             key={eachCardDetails._id}
                             id={eachCardDetails._id}
                             username={eachCardDetails.name}
-                            message="Hello How are you"
                             profile={Avatar}
                             handleUser={setUser}
-
+                            messages="Hello 😊"
                             status={onlineUsers?.includes(eachCardDetails._id) ? "online" : "offline"}
                         />
                     ))}
@@ -70,7 +63,7 @@ export const DashBoard = () => {
 
             {/* Chat Area */}
             {
-                user && user !== null && <ChatForm user={user} status={onlineUsers} handleUser={handleUser}/>
+                user && <ChatForm user={user} status={onlineUsers} handleUser={handleUser}/>
             }
         </div>
     </section>);

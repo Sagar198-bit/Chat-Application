@@ -1,4 +1,4 @@
-export const Card = ({id , username, profile, status, message , handleUser}) => {
+export const Card = ({id , username, profile, status , handleUser , messages}) => {
     return (
         <div onClick={() => handleUser({id, username})} className="flex  items-center gap-3 p-3 rounded-2xl hover:bg-slate-100 cursor-pointer transition-all duration-200">
         <img
@@ -19,7 +19,7 @@ export const Card = ({id , username, profile, status, message , handleUser}) => 
             </div>
 
             <p className="text-sm text-slate-500 truncate">
-                {message}
+                {messages}
             </p>
         </div>
     </div>)

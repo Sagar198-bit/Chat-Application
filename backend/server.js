@@ -37,7 +37,21 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
    console.log("User Connected", socket.id);
   // ConnectSocketHandler(socket);
+socket.on("typing" , ({senderId , receiverId}) => {
+    console.log(senderId , receiverId)
+    const receiver  = onlineUsers.get(receiverId);
 
+    if(receiver.socketId){
+        io.to(receiver.socketId).emit("userTyping" , {senderId})
+    }
+})
+
+    socket.on("stopTyping" , ({senderId , receiverId}) => {
+        const receiver  = onlineUsers.get(receiverId);
+        if(receiver.socketId){
+            io.to(receiver.socketId).emit("userStoppedTyping" , {senderId})
+        }
+    })
     socket.on("sendMessage",  (message) => {
         const {senderId, receiverId, text} = message
 
