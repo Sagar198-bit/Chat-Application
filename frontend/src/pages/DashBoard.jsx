@@ -25,9 +25,13 @@ export const DashBoard = () => {
 
 
         return () => {
-            socket.off('onlineUsers' , handleUsers())
+            socket.off('onlineUsers' , handleUsers)
         }
     }, []);
+
+    const handleUser = () => {
+        setUser(null)
+    }
 
 
     if(onlineUsers){
@@ -57,6 +61,7 @@ export const DashBoard = () => {
                             message="Hello How are you"
                             profile={Avatar}
                             handleUser={setUser}
+
                             status={onlineUsers?.includes(eachCardDetails._id) ? "online" : "offline"}
                         />
                     ))}
@@ -65,7 +70,7 @@ export const DashBoard = () => {
 
             {/* Chat Area */}
             {
-                user && user !== null && <ChatForm user={user} status={onlineUsers}/>
+                user && user !== null && <ChatForm user={user} status={onlineUsers} handleUser={handleUser}/>
             }
         </div>
     </section>);

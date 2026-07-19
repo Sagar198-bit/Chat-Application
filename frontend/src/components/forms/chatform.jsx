@@ -2,11 +2,11 @@ import Avatar from "../../../public/avatar.webp";
 import {useSelector} from "react-redux";
 import {useState , useEffect} from "react";
 import {Socket} from "../../socket/socket.js" // adjust to your actual socket instance path
-
-export const ChatForm = ({user , status}) => {
+import { MdCancel } from "react-icons/md";
+export const ChatForm = ({user , status, handleUser}) => {
     const {id: receiverId, username} = user
     const {data} = useSelector((state) => state.Auth)
-    console.log('Senderid: ' , data)// data = currently logged-in user
+    // data = currently logged-in user
     const currentUserId = data?.data?._id
     const isOnline = status.includes(receiverId)
     const [textInput, setTextInput] = useState("")
@@ -78,6 +78,11 @@ export const ChatForm = ({user , status}) => {
                         </p>
                     </div>
                 </div>
+
+                <div>
+                    <MdCancel size={25} onClick={handleUser} />
+                </div>
+
             </div>
 
             {/* Messages */}

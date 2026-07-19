@@ -63,17 +63,6 @@ io.on("connection", (socket) => {
 
         io.emit('onlineUsers' , Array.from(onlineUsers.keys()))
 
-
-        // socket.on("disconnect", () => {
-        //     for (const [userId, value] of onlineUsers.entries()) {
-        //         if (value.socketId === socket.id) {
-        //             onlineUsers.delete(userId)
-        //             break
-        //         }
-        //     }
-        //     console.log("A user disconnected:", socket.id)
-        // })
-
     });
 
   socket.on("disconnect", () => {
@@ -86,7 +75,7 @@ io.on("connection", (socket) => {
           }
       }
 
-      io.emit('onelineUsers' , Array.from(onlineUsers.keys()))
+      io.emit('onlineUsers' , Array.from(onlineUsers.keys()))
   });
 });
 
