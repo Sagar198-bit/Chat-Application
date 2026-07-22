@@ -13,7 +13,10 @@ export const isAuthenticated = createAsyncThunk(
 
 
         if (response.status === 200) {
+
             Socket(name , _id);
+
+
         }
 
         return response.data;

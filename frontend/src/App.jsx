@@ -4,9 +4,10 @@ import "./index.css";
 import { ProtectedRoutes } from "./components/ProtectedRoutes/ProtectRoute.jsx";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { isAuthenticated } from "../store/AuthSlices/AuthSlices.js";
+import {useNavigate} from "react-router-dom"
+import { isAuthenticated } from "../store/auth.slices/AuthSlices.js";
 export const App = () => {
-
+    const navigate = useNavigate();
   const dispatch = useDispatch();
   const { data, status } = useSelector((state) => state.Auth);
   useEffect(() => {
@@ -14,7 +15,11 @@ export const App = () => {
       dispatch(isAuthenticated());
     }
 
-  }, []);
+    if(status === "succeeded"){
+        navigate("/chats")
+    }
+
+  }, [status]);
 
 
   console.log("Auth Data: " , data , status)

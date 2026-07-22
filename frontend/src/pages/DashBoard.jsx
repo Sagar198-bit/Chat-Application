@@ -11,8 +11,6 @@ export const DashBoard = () => {
     const {data} = useGetUsers()
     const [user, setUser] = useState(null)
     const [onlineUsers, setOnlineUsers] = useState([])
-
-
     const {data: authData} = useSelector((state) => state.Auth)
     const socket = Socket(authData?.name, authData?._id)
 
@@ -31,9 +29,6 @@ export const DashBoard = () => {
     const handleUser = () => {
         setUser(null)
     }
-
-
-
 
     return (<section className="h-screen bg-slate-100 p-4">
         <div className="h-full flex overflow-hidden rounded-3xl bg-white shadow-2xl">

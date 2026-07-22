@@ -6,8 +6,11 @@ import { useGetLogin } from "../hooks/useAuth";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import {Socket} from "../socket/socket.js";
+import { useDispatch } from "react-redux";
+import {setProtectedData} from "../../store/protected.routes.slice/Protected.Slice.js";
 export const Login = () => {
    const navigate = useNavigate();
+   const dispatch = useDispatch();
   const [loginDetails, setLoginDetails] = useState({
     email: "",
     password: "",
@@ -39,13 +42,13 @@ export const Login = () => {
         email: loginDetails.email,
         password: loginDetails.password,
       });
-
       const{id , name} = result?.user ?? {}
+      dispatch(setProtectedData(true))
       //create the connection of socket
      Socket(id , name)
 
-      setLoginDetails({ email: "", password: "" });
       navigate("/chats");
+      setLoginDetails({ email: "", password: "" });
     } catch (error) {
       console.log(error);
     }

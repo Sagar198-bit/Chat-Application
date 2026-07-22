@@ -9,7 +9,7 @@ import {
   QueryClientProvider,
   useQuery,
 } from "@tanstack/react-query";
-import { store } from "../store/index.js";
+import { store } from "../store/store.js";
 export const queryClient = new QueryClient();
 createRoot(document.getElementById("root")).render(
   <StrictMode>
