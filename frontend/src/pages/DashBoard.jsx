@@ -30,18 +30,18 @@ export const DashBoard = () => {
         setUser(null)
     }
 
-    return (<section className="h-screen bg-slate-100 p-4">
-        <div className="h-full flex overflow-hidden rounded-3xl bg-white shadow-2xl">
+    return (<section className="h-screen bg-slate-100 p-0 sm:p-4">
+        <div className="h-full flex overflow-hidden rounded-none sm:rounded-3xl bg-white shadow-2xl">
 
             {/* Sidebar */}
-            <div className="flex-[3] bg-white shadow-[4px_0_15px_rgba(0,0,0,0.05)]">
+            <div className={`${user ? "hidden md:block" : "block"} w-full md:w-auto md:flex-[3] bg-white shadow-[4px_0_15px_rgba(0,0,0,0.05)]`}>
                 <div className="h-16 px-5 flex items-center">
                     <h1 className="text-xl font-bold text-slate-800">
                         Messages
                     </h1>
                 </div>
 
-                <div className="p-3 flex-1 space-y-2 overflow-y-auto h-[calc(100%-64px)]">
+                <div className="p-3 space-y-2 overflow-y-auto h-[calc(100%-64px)]">
                     {data?.map((eachCardDetails) => (
                         <Card
                             key={eachCardDetails._id}
@@ -57,9 +57,15 @@ export const DashBoard = () => {
             </div>
 
             {/* Chat Area */}
-            {
-                user && <ChatForm user={user} status={onlineUsers} handleUser={handleUser}/>
-            }
+            <div className={`${user ? "flex" : "hidden md:flex"} w-full md:flex-[7] flex-col`}>
+                {user ? (
+                    <ChatForm user={user} status={onlineUsers} handleUser={handleUser}/>
+                ) : (
+                    <div className="flex-1 hidden md:flex items-center justify-center text-slate-400">
+                        Select a chat to start messaging
+                    </div>
+                )}
+            </div>
         </div>
     </section>);
 };
