@@ -32,6 +32,7 @@ export const login = async (req, res) => {
       httpOnly: true, // cannot access via JS
       secure: false, // true in production (HTTPS)
       sameSite: "Lax", // CSRF protection
+      maxAge: 24 * 60 * 60 * 1000,
     });
     res.status(200).json({
       message: "User Login Successfully",
