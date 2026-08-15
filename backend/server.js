@@ -10,6 +10,8 @@ import { Server } from "socket.io";
 import cors from "cors";
 import {userRoutes} from "./src/routes/auth.users.js";
 const app = express();
+
+console.log("CLIENT_URL:", process.env.CLIENT_URL);
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
